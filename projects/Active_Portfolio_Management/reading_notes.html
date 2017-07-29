@@ -12,7 +12,7 @@
 
 <meta name="author" content="William Fang" />
 
-<meta name="date" content="2017-07-21" />
+<meta name="date" content="2017-07-22" />
 
 <title>Active Portfolio Management</title>
 
@@ -43,13 +43,27 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h1 class="title toc-ignore">Active Portfolio Management</h1>
 <h3 class="subtitle"><em>Reading Notes</em></h3>
 <h4 class="author"><em>William Fang</em></h4>
-<h4 class="date"><em>2017-07-21</em></h4>
+<h4 class="date"><em>2017-07-22</em></h4>
 
 
 <div id="TOC">
 <ul>
 <li><a href="#chap.1">Chap.1</a></li>
-<li><a href="#chap.2">Chap.2</a></li>
+<li><a href="#chap.2-capm">Chap.2 CAPM</a><ul>
+<li><a>收益率分解</a></li>
+<li><a href="#capm-">CAPM 假定预期残差收益率为零</a></li>
+</ul></li>
+<li><a href="#chap.3-">Chap.3 风险</a><ul>
+<li><a>投资组合的风险与方差</a></li>
+<li><a>跟踪误差</a></li>
+<li><a>风险模型</a><ul>
+<li><a>单因子模型</a></li>
+<li><a>相关系数模型</a></li>
+<li><a>历史样本模型</a></li>
+</ul></li>
+<li><a>结构化多因子风险模型</a></li>
+</ul></li>
+<li><a href="#chap.4-">Chap.4 超常收益率</a></li>
 </ul>
 </div>
 
@@ -72,8 +86,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <p><strong>收益、风险、基准、偏好、信息率以及收益率预测是组成主动投资组合管理的基本元素</strong>。</p>
 <hr />
 </div>
-<div id="chap.2" class="section level1">
-<h1>Chap.2</h1>
+<div id="chap.2-capm" class="section level1">
+<h1>Chap.2 CAPM</h1>
 <p>要点：</p>
 <ul>
 <li>任何股票的收益率都可以分解为系统性（市场）部分和残差部分，这不需要任何经济理论。</li>
@@ -83,6 +97,132 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li>CAPM 认为被动管理是主动管理的一种低风险的替代选择，使主动基金经理需要证明自己的价值。</li>
 <li>CAPM 为一致预期收益率提供了一个有效的来源。主动投资经理的成功程度将与他的预测优于 CAPM 的一致预测的程度相匹配。</li>
 <li>CAPM 是关于预期收益率而非风险的。</li>
+</ul>
+<div class="section level2">
+<h2>收益率分解</h2>
+<p>我们定义一个有投资组合的 <span class="math inline">\(\beta_P\)</span> 为 <span class="math display">\[
+\beta_P = \frac{Cov(r_P, r_M)}{Var(r_M)}
+\]</span></p>
+<p><span class="math inline">\(\beta\)</span> 正比于投资组合收益率与市场收益率之间的协方差，它是对未来的一个预测。<label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> 这里需要注意的是，市场组合的 <span class="math inline">\(\beta\)</span> 按照定义等于 1, 无风险资产的 <span class="math inline">\(、beta\)</span> 等于 0。</span></p>
+<p>从数据的角度来看，投资组合的 <span class="math inline">\(\beta_p\)</span> 来自<strong>线性回归</strong>的估计，这个回归方程为：</p>
+<p><span class="math display">\[
+r_{P,t} = \alpha_p + \beta_P \cdot r_{M,t} + \epsilon_{P,t}
+\]</span> 我们把估计得到的参数，<span class="math inline">\(\hat{\alpha_P}\)</span> 和 <span class="math inline">\(\hat{\beta_P}\)</span> 称为<strong>历史的（或者实现）的值</strong>。</p>
+<p><span class="math inline">\(\beta\)</span> 是一种将风险和收益率分解为两部分的工具。如果我们知道一个组合的 <span class="math inline">\(\beta\)</span>，就可以将它的<strong>超额收益率</strong>分解为<strong>市场部分</strong>和<strong>残差部分</strong>：</p>
+<p><span class="math display">\[
+r_P = \beta_P \cdot r_M + \theta_P
+\]</span> 如果我们假定残差收益率 <span class="math inline">\(\theta_P\)</span> 与市场收益率 <span class="math inline">\(r_M\)</span> 是不相关的，那么，投资组合的方差就可以分解为</p>
+<p><span class="math display">\[
+\sigma_P^2 = \beta_P^2 \cdot \sigma_M^2 + \omega_P^2
+\]</span> 其中，<span class="math inline">\(\omega_P^2\)</span> 是残差收益率 <span class="math inline">\(\theta_P\)</span> 的方差。</p>
+<blockquote>
+<p><span class="math inline">\(\beta\)</span> 能够使我们将任意投资组合的超额收益率分解为两个不相关的部分，一个是市场部分，另一个是残差部分。</p>
+</blockquote>
+</div>
+<div id="capm-" class="section level2">
+<h2>CAPM 假定预期残差收益率为零</h2>
+<p>在预期残差收益率为零的假设下，即 <span class="math inline">\(E\big[ \theta_P \big] = 0\)</span>，则推出，投资组合的预期超额收益率完全由市场的预期超额收益率和投资组合与市场的 <span class="math inline">\(\beta\)</span> 共同决定，</p>
+<p><span class="math display">\[
+E\big[ r_P \big] = \beta_P \cdot E\big[ r_m \big] = \beta \cdot \mu_M
+\]</span></p>
+<blockquote>
+<p>在 CAPM 模型下，任何投资组合的预期残差收益率为零，投资组合的超额收益率与 <span class="math inline">\(\beta\)</span> 成正比关系。</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="chap.3-" class="section level1">
+<h1>Chap.3 风险</h1>
+<div class="section level2">
+<h2>投资组合的风险与方差</h2>
+<p>对于任何两只股票，如果二者收益率之间的相关系数为 <span class="math inline">\(\rho\)</span>， 那么一个包含 <span class="math inline">\(N\)</span> 只股票的投资组合，其风险（标准差）为</p>
+<p><span class="math display">\[
+\sigma_P = \sigma \cdot \sqrt{\frac{1 + \rho \cdot (N-1) }{N}}
+\]</span></p>
+<p>特别的，对于独立不相关的股票的投资组合，我们有 <span class="math inline">\(\rho = 0\)</span>, 即得到</p>
+<p><span class="math display">\[
+\sigma_P = \frac{\sigma}{\sqrt{N}}
+\]</span> 而当 <span class="math inline">\(\rho \neq 0\)</span> 时，随着投资组合数量 <span class="math inline">\(N\)</span> 的增加，我们会得到</p>
+<p><span class="math display">\[
+\sigma_P \rightarrow \sigma \cdot \sqrt{\rho}
+\]</span></p>
+<p>这里，我们可以推导出计算<strong>年化标准差</strong>的方法。这样想：<label for="tufte-sn-3" class="margin-toggle sidenote-number">3</label><input type="checkbox" id="tufte-sn-3" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">3</span> 一般的，我们先计算日内的夏普比率，然后乘以<span class="math inline">\(\sqrt{252}\)</span>得到年化的夏普比率。</span></p>
+<blockquote>
+<p>风险既不能沿着横截面也不能沿着时间序列相加，但是方差可以沿着时间序列相加，如果任意不重叠的两段时期上的收益率是不相同的。事实上，对于大多数资产类型而言，其前后两段不重叠时期上的收益率之间的相关系，即自相关关系，都是接近于 0 的。<strong>这意味着，方差随着预测期的长度增长，而风险则随着预测期长度的平方根增长</strong>。</p>
+</blockquote>
+<p><span class="math display">\[
+\sigma_{annualized} = \sigma_{daily} \cdot \sqrt{252} 
+\]</span></p>
+</div>
+<div class="section level2">
+<h2>跟踪误差</h2>
+<p><span class="math display">\[
+\varphi = Std\big| r_P - r_B \big|
+\]</span> 我们称之为主动管理的<strong>跟踪误差</strong>，描述了组合对业绩基准的波动情况。</p>
+</div>
+<div class="section level2">
+<h2>风险模型</h2>
+<p>我们需要估计任意两只股票之间的相关系数矩阵，即<strong>协方差矩阵</strong></p>
+<p><span class="math display">\[
+\mathbf{V} = \begin{bmatrix}
+\sigma_{1}^2   &amp; \sigma_{1,2}^2 &amp; \cdots &amp; \sigma_{1,N}^2 \\
+\sigma_{2,1}^2 &amp; \sigma_{2}^2   &amp; \cdots &amp; \sigma_{2,N}^2 \\
+\vdots         &amp; \cdots         &amp; \vdots &amp; \cdots         \\
+\sigma_{N,1}^2   &amp; \sigma_{N,2}^2 &amp; \cdots &amp; \sigma_{N}^2
+\end{bmatrix}
+\]</span> 其中，我们有 <span class="math inline">\(\sigma_{i,j} = \sigma{j,i}\)</span>。协方差矩阵包含了我们需要计算投资组合层面的风险所不要的所有资产层面的风险信息。风险模型的目标就是要紧缺并高效地预测协方差矩阵。协方差矩阵中包含太多的独立参数，这使得建立风险模型的任务极具挑战性。</p>
+<div class="section level3">
+<h3>单因子模型</h3>
+<p>单因子模型是 CAPM 的雏形，但二者仍有不同。单因子模型首先将收益率分解为</p>
+<p><span class="math display">\[
+r_n = \beta_n \cdot r_M + \theta_n
+\]</span> 其中 <span class="math inline">\(\beta_n\)</span> 是股票 <span class="math inline">\(n\)</span> 的估计值， <span class="math inline">\(\theta_n\)</span> 这是残差收益率。单因子模型假设残差收益率之间相互不相关，因此推出</p>
+<p><span class="math display">\[
+Cov\big( r_n, r_m \big) = \beta_n \cdot \beta_m \cdot \sigma_M^2 \\
+\sigma_n^2 = \beta_n^2 \cdot \sigma_M^2 + \omega_n^2
+\]</span></p>
+</div>
+<div class="section level3">
+<h3>相关系数模型</h3>
+<p>该模型假设</p>
+<p><span class="math display">\[
+Cov\big( r_n,r_m \big) = \sigma_n \cdot \sigma_m \cdot \rho
+\]</span></p>
+</div>
+<div class="section level3">
+<h3>历史样本模型</h3>
+<p>这依赖于历史数据的样本方差和样本协方差。</p>
+</div>
+</div>
+<div class="section level2">
+<h2>结构化多因子风险模型</h2>
+<p>结构化多因子模型基于如下假设：股票的收益率可以被一组共同因子和一个仅与该股票有关的特异因子所解释．我们可以把这些共同因子看作是影响一组股票价格变动的作用力．这组股票可以是银行行业的全部股票，或者具有高财务杠杆的全部股票，或是所有市值较小的股票．如此等等。</p>
+<p>结构化风险模型对收益率进行线性分解，</p>
+<p><span class="math display">\[
+r_{n,t} = \sum_k X_{n,t}^{(k)} \cdot b_t^{(k)} + u_{n,t}^{(k)}
+\]</span> 整个市场的风险结构为</p>
+<p><span class="math display">\[
+\mathbf{V_{n,m}} = \sum_{k_1,k_2 = 1}^K X_{n}^{(k_1)} \cdot \mathbf{F}_{k_1,k_2} \cdot X_{m,K_2} + \mathbf{\Delta_{n,m}}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\mathbf{V_{n,m}}\)</span>：资产 n 和资产 m 的协方差矩阵， 当 <span class="math inline">\(n=m\)</span> 时，则退变为方差矩阵。</li>
+<li><span class="math inline">\(X_{n}^{(k_1)}\)</span>：资产 n 对因子 <span class="math inline">\(k_1\)</span> 的暴露度</li>
+<li><span class="math inline">\(\mathbf{F}_{k_1,k_2}\)</span>：因子 <span class="math inline">\(k_1\)</span> 和因子 <span class="math inline">\(k_2\)</span> 之间的收益率协方差</li>
+<li><span class="math inline">\(\mathbf{\Delta_{n,m}}\)</span>：资产 n 和资产 m 之间的特异协方差，并且有 <span class="math inline">\(\mathbf{\Delta_{n,m}} = \mathbf{0}\)</span></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="chap.4-" class="section level1">
+<h1>Chap.4 超常收益率</h1>
+<p><span class="math display">\[
+E\big[ r_n \big] = i_f + \beta_n \cdot \mu_B + \beta_n \cdot \Delta f_n + \alpha_n
+\]</span></p>
+<ul>
+<li><span class="math inline">\(i_f\)</span>: 无风险收益率，即时间价值</li>
+<li><span class="math inline">\(\beta_n \cdot \mu_B\)</span>: 相对于业绩基准的风险溢价</li>
+<li><span class="math inline">\(\beta_n \cdot \Delta f_n\)</span>: 超常业绩基准的收益率</li>
+<li><span class="math inline">\(\alpha_n\)</span>: 预期残差收益率，<span class="math inline">\(\alpha_n = E\big[ \theta_n \big]\)</span></li>
 </ul>
 </div>
 
